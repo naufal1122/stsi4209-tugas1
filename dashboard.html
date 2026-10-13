@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - SITTA Universitas Terbuka</title>
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Internal CSS for Dashboard Quick Actions */
+    .feature-badge {
+      font-size: 0.75rem;
+      background: #e1effe;
+      color: #1e429f;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER & NAVIGATION BAR -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand-wrapper">
+        <div class="brand-logo">
+          <img src="assets/logo-ut.svg" alt="UT" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <div class="brand-text">
+          <h1>SITTA UT</h1>
+          <small>Sistem Informasi Tiras & Transaksi Bahan Ajar</small>
+        </div>
+      </a>
+
+      <!-- MAIN NAVIGASI MENU -->
+      <nav>
+        <ul class="main-nav">
+          <li class="nav-item">
+            <a href="stok.html" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              Informasi Bahan Ajar
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="tracking.html" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              Tracking Pengiriman
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              Laporan &#9662;
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="tracking.html">Monitoring Progress DO Bahan Ajar</a></li>
+              <li><a href="stok.html">Rekap Bahan Ajar</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="tracking.html" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              Histori Transaksi Bahan Ajar
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- USER PROFILE & LOGOUT -->
+      <div class="nav-user">
+        <span class="user-badge" id="navUserDisplay">Admin SITTA</span>
+        <button id="btnLogout" class="btn-logout">Keluar</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN DASHBOARD CONTENT -->
+  <main class="main-content">
+    
+    <!-- GREETING HERO SECTION BERDASARKAN LOCAL TIME -->
+    <section class="greeting-hero">
+      <div class="greeting-text">
+        <h2 id="greetingText">Selamat Datang!</h2>
+        <p>Selamat beraktivitas di Portal Layanan Pemesanan & Distribusi Bahan Ajar Universitas Terbuka.</p>
+      </div>
+      <div class="current-time-badge" id="currentTimeClock">
+        Waktu Lokal...
+      </div>
+    </section>
+
+    <!-- PENCARIAN DELIVERY ORDER (DO) CEPAT DI DASHBOARD -->
+    <section class="tracking-search-box">
+      <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: #1e3c72; display: flex; align-items: center; gap: 8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        Pencarian Cepat Nomor Delivery Order (DO)
+      </h3>
+      <p style="color: #718096; font-size: 0.9rem; margin-bottom: 1.25rem;">
+        Masukkan nomor DO untuk memantau status ekspedisi pengiriman bahan ajar mahasiswa.
+      </p>
+
+      <form id="formTrackingDO">
+        <div class="search-input-group">
+          <input 
+            type="text" 
+            id="inputNomorDO" 
+            class="form-control" 
+            placeholder="Contoh nomor DO: 2023001234 atau 2023005678" 
+            required
+          >
+          <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            Cari
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- NOTIFIKASI TIDAK DITEMUKAN -->
+    <div id="trackingNotFound" style="display: none;"></div>
+
+    <!-- HASIL TRACKING DI DASHBOARD -->
+    <section id="trackingResultPanel" class="tracking-result-panel">
+      
+      <div class="tracking-summary-card">
+        <div class="summary-header">
+          <div>
+            <h3 style="color: #0b5cab; font-size: 1.25rem; margin-bottom: 4px;">
+              Hasil Tracking DO: <span id="trackNomorDO"></span>
+            </h3>
+            <span style="font-size: 0.9rem; color: #718096;">Nama Mahasiswa / Penerima: <strong id="trackNamaMahasiswa" style="color: #2d3748;">-</strong></span>
+          </div>
+          <div>
+            <span id="trackStatus" class="status-badge in-transit">Dalam Perjalanan</span>
+          </div>
+        </div>
+
+        <!-- PROGRESS STEPPER / PROGRESS BAR SIMULATION -->
+        <div class="progress-stepper">
+          <div class="progress-track"></div>
+          <div class="progress-fill" style="width: 50%;"></div>
+          
+          <div class="step-node completed">
+            <div class="step-circle">&#10003;</div>
+            <span>Penerimaan Loket</span>
+          </div>
+          <div class="step-node completed">
+            <div class="step-circle">&#10003;</div>
+            <span>Tiba di Hub Pusat</span>
+          </div>
+          <div class="step-node active">
+            <div class="step-circle">&bull;</div>
+            <span>Dalam Perjalanan</span>
+          </div>
+          <div class="step-node">
+            <div class="step-circle">4</div>
+            <span>Terkirim</span>
+          </div>
+        </div>
+
+        <div class="details-grid">
+          <div class="detail-item">
+            <div class="detail-item-title">Ekspedisi</div>
+            <div class="detail-item-val" id="trackEkspedisi">-</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-item-title">Tanggal Kirim</div>
+            <div class="detail-item-val" id="trackTanggalKirim">-</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-item-title">Jenis Paket / Kode</div>
+            <div class="detail-item-val" id="trackJenisPaket">-</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-item-title">Total Pembayaran</div>
+            <div class="detail-item-val" id="trackTotalPembayaran" style="color: #0b5cab;">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMELINE HISTORI PERJALANAN -->
+      <div class="timeline-card">
+        <h4 style="margin-bottom: 1.25rem; color: #1e3c72; font-size: 1.05rem;">
+          Histori Perjalanan Paket
+        </h4>
+        <ul class="timeline" id="trackTimelineList">
+          <!-- Diisi dinamis oleh script.js -->
+        </ul>
+      </div>
+    </section>
+
+    <!-- GRID MENU NAVIGASI KREATIF -->
+    <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: #2d3748;">Menu Layanan Utama</h3>
+    <section class="dashboard-grid">
+      
+      <a href="stok.html" class="card-nav">
+        <div>
+          <div class="card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          </div>
+          <h4 class="card-title">Informasi Bahan Ajar</h4>
+          <p class="card-desc">Cek ketersediaan stok buku materi pokok (BMP), kode lokasi gudang, dan tambah inventori baru.</p>
+        </div>
+        <div class="card-footer-link">Buka Katalog Stok &rarr;</div>
+      </a>
+
+      <a href="tracking.html" class="card-nav">
+        <div>
+          <div class="card-icon" style="background: rgba(247, 183, 49, 0.15); color: #d97706;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+          </div>
+          <h4 class="card-title">Tracking Pengiriman</h4>
+          <p class="card-desc">Lacak nomor Delivery Order pengiriman modul secara real-time dan histori ekspedisi.</p>
+        </div>
+        <div class="card-footer-link">Pelacakan Ekspedisi &rarr;</div>
+      </a>
+
+      <a href="tracking.html" class="card-nav">
+        <div>
+          <div class="card-icon" style="background: rgba(16, 185, 129, 0.1); color: #059669;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          </div>
+          <h4 class="card-title">Laporan Monitoring DO</h4>
+          <p class="card-desc">Pantau progres pengiriman bahan ajar di seluruh UPBJJ-UT dan status distribusi wilayah.</p>
+        </div>
+        <div class="card-footer-link">Lihat Monitoring &rarr;</div>
+      </a>
+
+      <a href="stok.html" class="card-nav">
+        <div>
+          <div class="card-icon" style="background: rgba(99, 102, 241, 0.1); color: #4f46e5;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <h4 class="card-title">Histori Transaksi Bahan Ajar</h4>
+          <p class="card-desc">Catatan pergerakan tiras bahan ajar, mutasi persediaan, dan laporan ketersediaan bahan ajar.</p>
+        </div>
+        <div class="card-footer-link">Lihat Riwayat &rarr;</div>
+      </a>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>&copy; 2026 SITTA - Universitas Terbuka. Tugas Praktik 1 Pengembangan Web Front-End (STSI4209).</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

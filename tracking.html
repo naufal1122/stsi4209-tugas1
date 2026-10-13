@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tracking Pengiriman Bahan Ajar - SITTA UT</title>
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER & NAVIGATION BAR -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand-wrapper">
+        <div class="brand-logo">
+          <img src="assets/logo-ut.svg" alt="UT" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <div class="brand-text">
+          <h1>SITTA UT</h1>
+          <small>Sistem Informasi Tiras & Transaksi Bahan Ajar</small>
+        </div>
+      </a>
+
+      <!-- MAIN NAVIGASI MENU -->
+      <nav>
+        <ul class="main-nav">
+          <li class="nav-item">
+            <a href="stok.html" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              Informasi Bahan Ajar
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="tracking.html" class="nav-link active">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              Tracking Pengiriman
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              Laporan &#9662;
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="tracking.html">Monitoring Progress DO Bahan Ajar</a></li>
+              <li><a href="stok.html">Rekap Bahan Ajar</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="dashboard.html" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              Histori Transaksi
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- USER PROFILE & LOGOUT -->
+      <div class="nav-user">
+        <span class="user-badge" id="navUserDisplay">Admin SITTA</span>
+        <button id="btnLogout" class="btn-logout">Keluar</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN TRACKING CONTENT -->
+  <main class="main-content">
+    
+    <div style="margin-bottom: 1.5rem;">
+      <h2 style="color: #0b5cab; font-size: 1.5rem; margin-bottom: 4px;">Tracking Pengiriman Bahan Ajar</h2>
+      <p style="color: #718096; font-size: 0.95rem;">Lacak status perjalanan pengiriman paket modul Delivery Order (DO) mahasiswa secara detail.</p>
+    </div>
+
+    <!-- PENCARIAN DELIVERY ORDER -->
+    <section class="tracking-search-box">
+      <form id="formTrackingDO">
+        <label for="inputNomorDO" class="form-label" style="font-size: 1rem; color: #1e3c72;">
+          Masukkan Nomor Delivery Order (DO):
+        </label>
+        <div class="search-input-group">
+          <input 
+            type="text" 
+            id="inputNomorDO" 
+            class="form-control" 
+            placeholder="Ketik nomor DO, contoh: 2023001234 atau 2023005678" 
+            required
+            value="2023001234"
+          >
+          <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            Cari Pengiriman
+          </button>
+        </div>
+      </form>
+      <div style="margin-top: 10px; font-size: 0.85rem; color: #718096;">
+        Tersedia data uji coba DO: <code>2023001234</code> (JNE) dan <code>2023005678</code> (Pos Indonesia).
+      </div>
+    </section>
+
+    <!-- ALERT NOT FOUND -->
+    <div id="trackingNotFound" style="display: none;"></div>
+
+    <!-- HASIL TRACKING -->
+    <section id="trackingResultPanel" class="tracking-result-panel" style="display: block;">
+      
+      <div class="tracking-summary-card">
+        <div class="summary-header">
+          <div>
+            <h3 style="color: #0b5cab; font-size: 1.3rem; margin-bottom: 4px;">
+              Delivery Order #<span id="trackNomorDO">2023001234</span>
+            </h3>
+            <span style="font-size: 0.95rem; color: #718096;">Nama Mahasiswa: <strong id="trackNamaMahasiswa" style="color: #2d3748;">Rina Wulandari</strong></span>
+          </div>
+          <div>
+            <span id="trackStatus" class="status-badge in-transit">Dalam Perjalanan</span>
+          </div>
+        </div>
+
+        <!-- PROGRESS BAR VISUAL / STEPPER -->
+        <div class="progress-stepper">
+          <div class="progress-track"></div>
+          <div class="progress-fill" style="width: 66%;"></div>
+          
+          <div class="step-node completed">
+            <div class="step-circle">&#10003;</div>
+            <span>Penerimaan Loket</span>
+          </div>
+          <div class="step-node completed">
+            <div class="step-circle">&#10003;</div>
+            <span>Tiba di Hub Pusat</span>
+          </div>
+          <div class="step-node active">
+            <div class="step-circle">&bull;</div>
+            <span>Dalam Perjalanan</span>
+          </div>
+          <div class="step-node">
+            <div class="step-circle">4</div>
+            <span>Terkirim</span>
+          </div>
+        </div>
+
+        <!-- DETAIL EKSPEDISI, TANGGAL KIRIM, JENIS PAKET, TOTAL PEMBAYARAN -->
+        <div class="details-grid">
+          <div class="detail-item">
+            <div class="detail-item-title">Ekspedisi</div>
+            <div class="detail-item-val" id="trackEkspedisi">JNE</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-item-title">Tanggal Kirim</div>
+            <div class="detail-item-val" id="trackTanggalKirim">2025-08-25</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-item-title">Jenis Paket / Kode</div>
+            <div class="detail-item-val" id="trackJenisPaket">0JKT01</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-item-title">Total Pembayaran</div>
+            <div class="detail-item-val" id="trackTotalPembayaran" style="color: #0b5cab; font-size: 1.1rem;">Rp 180.000</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMELINE DETAIL PERJALANAN PENGIRIMAN -->
+      <div class="timeline-card">
+        <h4 style="margin-bottom: 1.25rem; color: #1e3c72; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          Histori Perjalanan Paket Ekspedisi
+        </h4>
+        <ul class="timeline" id="trackTimelineList">
+          <li class="timeline-step">
+            <div class="timeline-time">2025-08-25 10:12:20</div>
+            <div class="timeline-desc">Penerimaan di Loket: TANGERANG SELATAN. Pengirim: Universitas Terbuka</div>
+          </li>
+          <li class="timeline-step">
+            <div class="timeline-time">2025-08-25 14:07:56</div>
+            <div class="timeline-desc">Tiba di Hub: TANGERANG SELATAN</div>
+          </li>
+          <li class="timeline-step">
+            <div class="timeline-time">2025-08-25 10:12:20</div>
+            <div class="timeline-desc">Diteruskan ke Kantor Jakarta Selatan</div>
+          </li>
+        </ul>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>&copy; 2026 SITTA - Universitas Terbuka. Tugas Praktik 1 Pengembangan Web Front-End (STSI4209).</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

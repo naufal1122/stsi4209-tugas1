@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - SITTA Universitas Terbuka</title>
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Internal CSS for Login Page Specific Elements */
+    .login-icon-box {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1rem;
+      background: #0b5cab;
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(11, 92, 171, 0.3);
+    }
+  </style>
+</head>
+<body class="login-body">
+
+  <main class="login-card">
+    <header class="login-header">
+      <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
+        <img src="assets/logo-ut.svg" alt="Logo Universitas Terbuka" style="width: 76px; height: 76px;">
+      </div>
+      <h2>Selamat Datang</h2>
+      <p>Sistem Pemesanan Bahan Ajar (SITTA) Universitas Terbuka</p>
+    </header>
+
+    <!-- Feedback Container for Errors -->
+    <div id="loginAlert" style="display: none;"></div>
+
+    <form id="loginForm" autocomplete="off">
+      <div class="form-group" style="text-align: left;">
+        <label for="email" class="form-label">Email UT</label>
+        <input 
+          type="email" 
+          id="email" 
+          class="form-control" 
+          placeholder="nama@ut.ac.id" 
+          required 
+          autocomplete="username"
+        >
+      </div>
+
+      <div class="form-group" style="text-align: left;">
+        <label for="password" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          class="form-control" 
+          placeholder="Masukkan password" 
+          required 
+          autocomplete="current-password"
+        >
+      </div>
+
+      <div class="login-actions">
+        <button type="button" id="btnLupaPassword" class="login-link">Lupa password?</button>
+      </div>
+
+      <!-- Inline CSS Demo -->
+      <button type="submit" class="btn btn-secondary btn-block" style="font-weight: 700; font-size: 1rem; padding: 0.85rem;">
+        Masuk
+      </button>
+
+      <div style="margin-top: 1.25rem;">
+        <span style="font-size: 0.85rem; color: #718096;">Belum punya akun?</span>
+        <button type="button" id="btnDaftar" class="login-link" style="font-weight: 600; margin-left: 4px;">Daftar Akun Baru</button>
+      </div>
+    </form>
+
+    <aside class="demo-account-hint">
+      <strong>Akun Uji Coba:</strong><br>
+      Email: <code>rina@ut.ac.id</code> | Pass: <code>rina123</code><br>
+      Email: <code>admin@ut.ac.id</code> | Pass: <code>admin123</code>
+    </aside>
+  </main>
+
+  <!-- MODAL: LUPA PASSWORD -->
+  <div class="modal-overlay" id="modalLupaPassword" role="dialog" aria-modal="true" aria-labelledby="modalLupaTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalLupaTitle">Lupa Kata Sandi</h3>
+        <button class="modal-close" aria-label="Tutup Modal">&times;</button>
+      </div>
+      <form id="formLupaPassword">
+        <div class="modal-body">
+          <p style="margin-bottom: 1rem; color: #4a5568; font-size: 0.9rem;">
+            Masukkan alamat email akun SITTA UT Anda. Kami akan mengirimkan tautan untuk mengatur ulang kata sandi.
+          </p>
+          <div class="form-group">
+            <label for="resetEmail" class="form-label">Email Terdaftar</label>
+            <input type="email" id="resetEmail" class="form-control" placeholder="nama@ut.ac.id" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline modal-close">Batal</button>
+          <button type="submit" class="btn btn-primary">Kirim Permintaan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DAFTAR AKUN BARU -->
+  <div class="modal-overlay" id="modalDaftar" role="dialog" aria-modal="true" aria-labelledby="modalDaftarTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalDaftarTitle">Pendaftaran Akun SITTA</h3>
+        <button class="modal-close" aria-label="Tutup Modal">&times;</button>
+      </div>
+      <form id="formDaftar">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="regNama" class="form-label">Nama Lengkap</label>
+            <input type="text" id="regNama" class="form-control" placeholder="Contoh: Budi Santoso" required>
+          </div>
+          <div class="form-group">
+            <label for="regEmail" class="form-label">Email UT</label>
+            <input type="email" id="regEmail" class="form-control" placeholder="budi@ut.ac.id" required>
+          </div>
+          <div class="form-group">
+            <label for="regPassword" class="form-label">Password Baru</label>
+            <input type="password" id="regPassword" class="form-control" placeholder="Minimal 6 karakter" required>
+          </div>
+          <div class="form-group">
+            <label for="regRole" class="form-label">Peran / Unit Kerja</label>
+            <select id="regRole" class="form-control" required>
+              <option value="UPBJJ-UT">UPBJJ-UT (Daerah)</option>
+              <option value="Puslaba">Puslaba UT Pusat</option>
+              <option value="Fakultas">Fakultas</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline modal-close">Tutup</button>
+          <button type="submit" class="btn btn-primary">Daftar Sekarang</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
