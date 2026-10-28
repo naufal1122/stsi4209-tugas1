@@ -3,151 +3,354 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - SITTA Universitas Terbuka</title>
+  <title>Portal Tugas Praktik 2 - SITTA Universitas Terbuka</title>
   <!-- External CSS -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/logo-ut.svg">
   <style>
-    /* Internal CSS for Login Page Specific Elements */
-    .login-icon-box {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 1rem;
-      background: #0b5cab;
+    .portal-hero {
+      background: linear-gradient(135deg, #0b5cab 0%, #1e3c72 100%);
       color: #ffffff;
+      padding: 3rem 1.5rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .portal-hero::after {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 250px;
+      height: 250px;
+      background: rgba(255, 255, 255, 0.06);
       border-radius: 50%;
+      pointer-events: none;
+    }
+    .nav-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .nav-feature-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 10px rgba(11, 92, 171, 0.3);
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+    .nav-feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: #93c5fd;
+    }
+    .badge-page-indicator {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .rubric-table th, .rubric-table td {
+      padding: 10px 14px;
+      font-size: 0.88rem;
     }
   </style>
 </head>
-<body class="login-body">
+<body>
 
-  <main class="login-card">
-    <header class="login-header">
-      <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
-        <img src="assets/logo-ut.svg" alt="Logo Universitas Terbuka" style="width: 76px; height: 76px;">
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="index.html" class="brand-wrapper">
+        <div class="brand-logo">
+          <img src="assets/logo-ut.svg" alt="UT" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <div class="brand-text">
+          <h1>SITTA UT</h1>
+          <small>Sistem Informasi Tiras & Transaksi Bahan Ajar - Tugas Praktik 2</small>
+        </div>
+      </a>
+
+      <!-- MAIN NAVIGASI MENU -->
+      <nav>
+        <ul class="main-nav">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link active">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              Beranda Portal
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="stok.html" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              Stok Bahan Ajar
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="tracking.html" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              Tracking DO
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-user">
+        <span class="user-badge">Mahasiswa UT (Vue.js App)</span>
       </div>
-      <h2>Selamat Datang</h2>
-      <p>Sistem Pemesanan Bahan Ajar (SITTA) Universitas Terbuka</p>
-    </header>
+    </div>
+  </header>
 
-    <!-- Feedback Container for Errors -->
-    <div id="loginAlert" style="display: none;"></div>
-
-    <form id="loginForm" autocomplete="off">
-      <div class="form-group" style="text-align: left;">
-        <label for="email" class="form-label">Email UT</label>
-        <input 
-          type="email" 
-          id="email" 
-          class="form-control" 
-          placeholder="nama@ut.ac.id" 
-          required 
-          autocomplete="username"
-        >
+  <main class="main-content" style="max-width: 1100px;">
+    
+    <!-- HERO SECTION -->
+    <section class="portal-hero">
+      <div style="max-width: 800px;">
+        <span class="badge" style="background: rgba(255, 255, 255, 0.2); color: #fff; font-size: 0.8rem; margin-bottom: 0.75rem;">
+          TUGAS PRAKTIK 2 &bull; STSI4209
+        </span>
+        <h2 style="font-size: 2rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.75rem;">
+          Aplikasi Pemesanan Bahan Ajar SITTA UT Berbasis Vue.js
+        </h2>
+        <p style="font-size: 1.05rem; opacity: 0.92; line-height: 1.6; margin-bottom: 1.25rem;">
+          Selamat datang pada portal aplikasi web pemesanan dan distribusi bahan ajar (BMP) SITTA Universitas Terbuka. Aplikasi ini dibangun secara murni menggunakan framework JavaScript <strong>Vue.js</strong> untuk antarmuka interaktif, reaktivitas data, dan pelacakan DO yang mutakhir.
+        </p>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <a href="stok.html" class="btn btn-secondary" style="color: #1e3c72; font-weight: 700;">
+            Buka Halaman 1: Stok Bahan Ajar &rarr;
+          </a>
+          <a href="tracking.html" class="btn" style="background: rgba(255, 255, 255, 0.15); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); font-weight: 600;">
+            Buka Halaman 2: Tracking DO &rarr;
+          </a>
+        </div>
       </div>
+    </section>
 
-      <div class="form-group" style="text-align: left;">
-        <label for="password" class="form-label">Password</label>
-        <input 
-          type="password" 
-          id="password" 
-          class="form-control" 
-          placeholder="Masukkan password" 
-          required 
-          autocomplete="current-password"
-        >
+    <!-- 2 HALAMAN UTAMA KARTU NAVIGASI -->
+    <div style="margin-bottom: 1.25rem;">
+      <h3 style="color: #1e3c72; font-size: 1.35rem; font-weight: 700;">Navigasi Dua Halaman Aplikasi (Wajib)</h3>
+      <p style="color: #64748b; font-size: 0.92rem;">Silakan pilih salah satu modul aplikasi web yang ingin diakses:</p>
+    </div>
+
+    <div class="nav-card-grid">
+      
+      <!-- KARTU 1: STOK BAHAN AJAR -->
+      <article class="nav-feature-card">
+        <div>
+          <span class="badge-page-indicator" style="background: #e0f2fe; color: #0369a1;">
+            Halaman 1 (Wajib)
+          </span>
+          <h4 style="font-size: 1.35rem; font-weight: 700; color: #0b5cab; margin-bottom: 0.75rem;">
+            Stok Bahan Ajar BMP
+          </h4>
+          <p style="color: #4b5563; font-size: 0.92rem; line-height: 1.6; margin-bottom: 1rem;">
+            Menampilkan inventaris bahan ajar untuk seluruh UT-Daerah lengkap dengan sistem filter cerdas, dependent dropdown, status re-order, fitur edit stok, dan formulir input data baru.
+          </p>
+
+          <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 7px; font-size: 0.88rem; color: #374151;">
+            <li style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #10b981;">&#10004;</span>
+              <span><strong>Filter & Sort Caching:</strong> Menggunakan <code>computed</code> property tanpa recompute berulang.</span>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #10b981;">&#10004;</span>
+              <span><strong>Dependent Options:</strong> Filter Kategori muncul setelah UT-Daerah dipilih.</span>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #10b981;">&#10004;</span>
+              <span><strong>Status Visual:</strong> Aman (Hijau), Menipis (Orange), Kosong (Merah) via <code>v-if</code>.</span>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #10b981;">&#10004;</span>
+              <span><strong>Catatan HTML:</strong> Directive <code>v-html</code> untuk styling catatan.</span>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #10b981;">&#10004;</span>
+              <span><strong>Watchers & Storage:</strong> Otomatis simpan stok ke <code>localStorage</code>.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <a href="stok.html" class="btn btn-primary btn-block" style="text-align: center; font-weight: 700;">
+            Akses Halaman Stok Bahan Ajar &rarr;
+          </a>
+        </div>
+      </article>
+
+      <!-- KARTU 2: TRACKING DELIVERY ORDER -->
+      <article class="nav-feature-card">
+        <div>
+          <span class="badge-page-indicator" style="background: #fef3c7; color: #92400e;">
+            Halaman 2 (Wajib)
+          </span>
+          <h4 style="font-size: 1.35rem; font-weight: 700; color: #0b5cab; margin-bottom: 0.75rem;">
+            Tracking Delivery Order (DO)
+          </h4>
+          <p style="color: #4b5563; font-size: 0.92rem; line-height: 1.6; margin-bottom: 1rem;">
+            Melacak status dan riwayat pengiriman paket BMP mahasiswa secara terperinci serta menyediakan formulir penerbitan Delivery Order baru dengan auto-generated number.
+          </p>
+
+          <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 7px; font-size: 0.88rem; color: #374151;">
+            <li style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #10b981;">&#10004;</span>
+              <span><strong>Auto Nomor DO:</strong> Tergenerate otomatis <code>DO[Tahun]-[Sequence]</code>.</span>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #10b981;">&#10004;</span>
+              <span><strong>Detail Paket Interaktif:</strong> Muncul informasi modul lengkap di bawah elemen <code>&lt;select&gt;</code>.</span>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #10b981;">&#10004;</span>
+              <span><strong>Total Harga Reaktif:</strong> Terisi otomatis dari <code>paket.harga</code> saat paket dipilih.</span>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #10b981;">&#10004;</span>
+              <span><strong>Tanggal Otomatis:</strong> Mendukung tanggal manual maupun objek <code>Date()</code> lokal.</span>
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="color: #10b981;">&#10004;</span>
+              <span><strong>Timeline Ekspedisi:</strong> Menampilkan riwayat perjalanan lengkap step-by-step.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <a href="tracking.html" class="btn btn-primary btn-block" style="text-align: center; font-weight: 700;">
+            Akses Halaman Tracking DO &rarr;
+          </a>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- TABEL KESESUAIAN INDIKATOR CAPAIAN PEMBELAJARAN (RUBRIK TUGAS 2) -->
+    <section class="card" style="padding: 1.75rem; margin-bottom: 2rem;">
+      <h3 style="font-size: 1.25rem; font-weight: 700; color: #1e3c72; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+        Matriks Pemenuhan 5 Indikator Capaian Tugas Praktik 2
+      </h3>
+      <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1.25rem;">
+        Panduan ringkas untuk mempermudah penilaian dan referensi pembuatan rekaman video penjelasan (maksimal 15 menit):
+      </p>
+
+      <div class="table-responsive">
+        <table class="custom-table rubric-table">
+          <thead>
+            <tr style="background: #f1f5f9;">
+              <th style="width: 25%;">Indikator Capaian</th>
+              <th style="width: 35%;">Penerapan pada Stok Bahan Ajar (stok.html)</th>
+              <th style="width: 40%;">Penerapan pada Tracking DO (tracking.html)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>1. Pengorganisasian Kode Vue.js</strong>
+              </td>
+              <td>
+                Struktur Vue instance bersih di <code>js/stok-app.js</code>: <code>data</code>, <code>computed</code>, <code>methods</code>, <code>watch</code>, <code>mounted</code>.
+              </td>
+              <td>
+                Struktur Vue instance di <code>js/tracking-app.js</code> terpisah rapi dengan modul data terpusat di <code>dataBahanAjar.js</code>.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>2. Menampilkan Data (Mustaches, v-text, v-html)</strong>
+              </td>
+              <td>
+                - Mustaches <code>{{ }}</code> pada kolom tabel.<br>
+                - <code>v-text</code> untuk ringkasan filter teks.<br>
+                - <code>v-html</code> untuk kolom <code>catatanHTML</code> (&lt;em&gt;, &lt;strong&gt;, &lt;u&gt;).
+              </td>
+              <td>
+                - Mustaches <code>{{ }}</code> pada detail NIM, Nama, Total Harga.<br>
+                - <code>v-for</code> untuk render list paket, DO, dan riwayat perjalanan ekspedisi.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>3. Penggunaan Conditional (v-if, v-else-if, v-else, v-show)</strong>
+              </td>
+              <td>
+                - <code>v-if</code> / <code>v-else-if</code> / <code>v-else</code> pada Status Stok (Aman, Menipis, Kosong).<br>
+                - <code>v-if</code> pada dependent filter Kategori.<br>
+                - <code>v-show</code> pada formulir tambah & notifikasi toast.
+              </td>
+              <td>
+                - <code>v-if="currentDO"</code> untuk menampilkan data pelacakan.<br>
+                - <code>v-else-if</code> untuk pesan DO tidak ditemukan.<br>
+                - <code>v-if="selectedPaketDetail"</code> untuk detail isi paket di bawah dropdown.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>4. Data Binding & Property (Computed & Methods)</strong>
+              </td>
+              <td>
+                - <code>v-model</code> pada filter & formulir.<br>
+                - <code>computed: filteredStok</code> meng-cache filter & sort tanpa recompute.<br>
+                - <code>methods</code>: resetFilter, tambahStok, editStok, hapusStok, formatRupiah.
+              </td>
+              <td>
+                - <code>v-model</code> two-way binding pada form input.<br>
+                - <code>computed: nextNomorDO</code> auto-generate DO[Tahun]-[Seq].<br>
+                - <code>computed: selectedPaketDetail</code> mengambil info isi paket.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>5. Fungsi Watchers (&ge; 2 Watcher)</strong>
+              </td>
+              <td>
+                - <strong>Watcher 1</strong>: Memantau <code>filterUpbjj</code> (reset kategori saat UT daerah berubah).<br>
+                - <strong>Watcher 2</strong>: Deep watch pada <code>stok</code> untuk persistensi otomatis ke <code>localStorage</code>.
+              </td>
+              <td>
+                - <strong>Watcher 1</strong>: Memantau <code>formDO.paketKode</code> (sinkronisasi harga paket otomatis).<br>
+                - <strong>Watcher 2</strong>: Deep watch <code>trackingData</code> ke <code>localStorage</code> & auto-search watcher.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>6. Formulir & Validasi Input</strong>
+              </td>
+              <td>
+                Formulir input bahan ajar baru dengan validasi field kode, judul, upbjj, kategori, harga, qty, safety, dan feedback visual.
+              </td>
+              <td>
+                Formulir penerbitan DO baru dengan validasi NIM numerik, Nama, Ekspedisi, Paket BMP, dan tanggal kirim lokal.
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+    </section>
 
-      <div class="login-actions">
-        <button type="button" id="btnLupaPassword" class="login-link">Lupa password?</button>
-      </div>
-
-      <!-- Inline CSS Demo -->
-      <button type="submit" class="btn btn-secondary btn-block" style="font-weight: 700; font-size: 1rem; padding: 0.85rem;">
-        Masuk
-      </button>
-
-      <div style="margin-top: 1.25rem;">
-        <span style="font-size: 0.85rem; color: #718096;">Belum punya akun?</span>
-        <button type="button" id="btnDaftar" class="login-link" style="font-weight: 600; margin-left: 4px;">Daftar Akun Baru</button>
-      </div>
-    </form>
-
-    <aside class="demo-account-hint">
-      <strong>Akun Uji Coba:</strong><br>
-      Email: <code>rina@ut.ac.id</code> | Pass: <code>rina123</code><br>
-      Email: <code>admin@ut.ac.id</code> | Pass: <code>admin123</code>
-    </aside>
   </main>
 
-  <!-- MODAL: LUPA PASSWORD -->
-  <div class="modal-overlay" id="modalLupaPassword" role="dialog" aria-modal="true" aria-labelledby="modalLupaTitle">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="modalLupaTitle">Lupa Kata Sandi</h3>
-        <button class="modal-close" aria-label="Tutup Modal">&times;</button>
-      </div>
-      <form id="formLupaPassword">
-        <div class="modal-body">
-          <p style="margin-bottom: 1rem; color: #4a5568; font-size: 0.9rem;">
-            Masukkan alamat email akun SITTA UT Anda. Kami akan mengirimkan tautan untuk mengatur ulang kata sandi.
-          </p>
-          <div class="form-group">
-            <label for="resetEmail" class="form-label">Email Terdaftar</label>
-            <input type="email" id="resetEmail" class="form-control" placeholder="nama@ut.ac.id" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline modal-close">Batal</button>
-          <button type="submit" class="btn btn-primary">Kirim Permintaan</button>
-        </div>
-      </form>
+  <!-- FOOTER -->
+  <footer class="site-footer" style="margin-top: auto; padding: 1.5rem 0; text-align: center; color: #64748b; font-size: 0.85rem; border-top: 1px solid #e2e8f0; background: #ffffff;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+      <p>SITTA UT &bull; Sistem Informasi Tiras &amp; Transaksi Bahan Ajar Universitas Terbuka</p>
+      <p style="margin-top: 4px; font-size: 0.8rem; color: #94a3b8;">
+        Tugas Praktik 2 STSI4209 &bull; Dikembangkan dengan Vue.js
+      </p>
     </div>
-  </div>
+  </footer>
 
-  <!-- MODAL: DAFTAR AKUN BARU -->
-  <div class="modal-overlay" id="modalDaftar" role="dialog" aria-modal="true" aria-labelledby="modalDaftarTitle">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="modalDaftarTitle">Pendaftaran Akun SITTA</h3>
-        <button class="modal-close" aria-label="Tutup Modal">&times;</button>
-      </div>
-      <form id="formDaftar">
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="regNama" class="form-label">Nama Lengkap</label>
-            <input type="text" id="regNama" class="form-control" placeholder="Contoh: Budi Santoso" required>
-          </div>
-          <div class="form-group">
-            <label for="regEmail" class="form-label">Email UT</label>
-            <input type="email" id="regEmail" class="form-control" placeholder="budi@ut.ac.id" required>
-          </div>
-          <div class="form-group">
-            <label for="regPassword" class="form-label">Password Baru</label>
-            <input type="password" id="regPassword" class="form-control" placeholder="Minimal 6 karakter" required>
-          </div>
-          <div class="form-group">
-            <label for="regRole" class="form-label">Peran / Unit Kerja</label>
-            <select id="regRole" class="form-control" required>
-              <option value="UPBJJ-UT">UPBJJ-UT (Daerah)</option>
-              <option value="Puslaba">Puslaba UT Pusat</option>
-              <option value="Fakultas">Fakultas</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline modal-close">Tutup</button>
-          <button type="submit" class="btn btn-primary">Daftar Sekarang</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/script.js"></script>
 </body>
 </html>

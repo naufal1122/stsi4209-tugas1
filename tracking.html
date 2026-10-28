@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tracking Pengiriman Bahan Ajar - SITTA UT</title>
+  <title>Tracking Delivery Order (DO) - SITTA Universitas Terbuka</title>
   <!-- External CSS -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/logo-ut.svg">
 </head>
 <body>
 
-  <!-- HEADER & NAVIGATION BAR -->
+  <!-- HEADER & NAVIGATION BAR UT -->
   <header class="site-header">
     <div class="nav-container">
-      <a href="dashboard.html" class="brand-wrapper">
+      <a href="index.html" class="brand-wrapper">
         <div class="brand-logo">
           <img src="assets/logo-ut.svg" alt="UT" style="width: 100%; height: 100%; object-fit: contain;">
         </div>
         <div class="brand-text">
           <h1>SITTA UT</h1>
-          <small>Sistem Informasi Tiras & Transaksi Bahan Ajar</small>
+          <small>Sistem Informasi Tiras & Transaksi Bahan Ajar - Tugas Praktik 2</small>
         </div>
       </a>
 
@@ -26,174 +27,473 @@
       <nav>
         <ul class="main-nav">
           <li class="nav-item">
+            <a href="index.html" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              Beranda Portal
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="stok.html" class="nav-link">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-              Informasi Bahan Ajar
+              Stok Bahan Ajar
             </a>
           </li>
           <li class="nav-item">
             <a href="tracking.html" class="nav-link active">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-              Tracking Pengiriman
-            </a>
-          </li>
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-              Laporan &#9662;
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="tracking.html">Monitoring Progress DO Bahan Ajar</a></li>
-              <li><a href="stok.html">Rekap Bahan Ajar</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="dashboard.html" class="nav-link">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              Histori Transaksi
+              Tracking DO
             </a>
           </li>
         </ul>
       </nav>
 
-      <!-- USER PROFILE & LOGOUT -->
+      <!-- USER DISPLAY -->
       <div class="nav-user">
-        <span class="user-badge" id="navUserDisplay">Admin SITTA</span>
-        <button id="btnLogout" class="btn-logout">Keluar</button>
+        <span class="user-badge">Mahasiswa UT (Vue.js App)</span>
       </div>
     </div>
   </header>
 
-  <!-- MAIN TRACKING CONTENT -->
-  <main class="main-content">
-    
-    <div style="margin-bottom: 1.5rem;">
-      <h2 style="color: #0b5cab; font-size: 1.5rem; margin-bottom: 4px;">Tracking Pengiriman Bahan Ajar</h2>
-      <p style="color: #718096; font-size: 0.95rem;">Lacak status perjalanan pengiriman paket modul Delivery Order (DO) mahasiswa secara detail.</p>
+  <!-- MOUNT POINT APLIKASI VUE.JS TRACKING -->
+  <main class="main-content" id="appTracking" v-cloak>
+
+    <!-- NOTIFIKASI TOAST (v-show) -->
+    <div 
+      v-show="alertNotification.show" 
+      :class="['custom-alert', 'alert-' + alertNotification.type]"
+      style="margin-bottom: 1.25rem; transition: all 0.3s ease;"
+    >
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <span><strong>Informasi:</strong> {{ alertNotification.message }}</span>
+        <button type="button" @click="alertNotification.show = false" style="background:none; border:none; cursor:pointer; font-size:1.1rem; line-height:1;">&times;</button>
+      </div>
     </div>
 
-    <!-- PENCARIAN DELIVERY ORDER -->
-    <section class="tracking-search-box">
-      <form id="formTrackingDO">
-        <label for="inputNomorDO" class="form-label" style="font-size: 1rem; color: #1e3c72;">
+    <!-- HEADER TITLE & ACTION BUTTON -->
+    <div class="stok-header-actions" style="margin-bottom: 1.25rem;">
+      <div>
+        <h2 style="color: #0b5cab; font-size: 1.6rem; font-weight: 700; margin-bottom: 4px;">
+          Tracking Status Pengiriman Delivery Order (DO)
+        </h2>
+        <p style="color: #64748b; font-size: 0.95rem;">
+          Lacak status distribusi paket modul BMP mahasiswa secara real-time berbasis framework Vue.js
+        </p>
+      </div>
+      
+      <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+        <!-- Tombol Tambah DO Baru -->
+        <button 
+          @click="bukaModalTambahDO" 
+          class="btn btn-primary"
+          style="display: flex; align-items: center; gap: 6px;"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          + Tambah Delivery Order Baru
+        </button>
+
+        <button 
+          @click="resetTrackingData" 
+          class="btn btn-outline"
+          title="Kembalikan data ke dummy awal"
+          style="font-size: 0.85rem;"
+        >
+          Reset Data Tracking
+        </button>
+      </div>
+    </div>
+
+    <!-- FORM PENCARIAN DELIVERY ORDER -->
+    <section class="tracking-search-box" style="margin-bottom: 1.5rem;">
+      <form @submit.prevent="lacakDO">
+        <label for="inputDO" class="form-label" style="font-size: 1rem; color: #1e3c72; font-weight: 700;">
           Masukkan Nomor Delivery Order (DO):
         </label>
         <div class="search-input-group">
           <input 
             type="text" 
-            id="inputNomorDO" 
+            id="inputDO"
+            v-model="inputCariDO" 
             class="form-control" 
-            placeholder="Ketik nomor DO, contoh: 2023001234 atau 2023005678" 
+            placeholder="Ketik nomor DO, contoh: DO2025-001 atau DO2025-002" 
             required
-            value="2023001234"
+            style="font-size: 1.05rem; font-weight: 600;"
           >
-          <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+          <button type="submit" class="btn btn-primary" style="white-space: nowrap; font-weight: 600;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            Cari Pengiriman
+            Lacak Pengiriman
           </button>
         </div>
       </form>
-      <div style="margin-top: 10px; font-size: 0.85rem; color: #718096;">
-        Tersedia data uji coba DO: <code>2023001234</code> (JNE) dan <code>2023005678</code> (Pos Indonesia).
+
+      <!-- QUICK SELECT PILIHAN NOMOR DO (v-for) -->
+      <div style="margin-top: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <span style="font-size: 0.85rem; color: #64748b; font-weight: 600;">Pilih Cepat DO:</span>
+        <button 
+          v-for="item in listDORingkas" 
+          :key="item.nomorDO" 
+          type="button"
+          @click="pilihCepatDO(item.nomorDO)"
+          :class="['btn btn-sm', inputCariDO === item.nomorDO ? 'btn-primary' : 'btn-outline']"
+          style="border-radius: 999px; font-size: 0.78rem;"
+        >
+          {{ item.nomorDO }} ({{ item.nama }})
+        </button>
+      </div>
+
+      <!-- WATCHER STATUS BAR (MEMBUKTIKAN INDIKATOR 5 WATCHER BEKERJA) -->
+      <div v-show="watcherLog" style="margin-top: 0.85rem; font-size: 0.78rem; color: #0369a1; background: #e0f2fe; padding: 5px 10px; border-radius: 4px;">
+        <strong>Log Reaktivitas Watcher:</strong> {{ watcherLog }}
       </div>
     </section>
 
-    <!-- ALERT NOT FOUND -->
-    <div id="trackingNotFound" style="display: none;"></div>
-
-    <!-- HASIL TRACKING -->
-    <section id="trackingResultPanel" class="tracking-result-panel" style="display: block;">
+    <!-- HASIL PELACAKAN: JIKA NOMOR DO DITEMUKAN (v-if="currentDO") -->
+    <div v-if="currentDO">
       
-      <div class="tracking-summary-card">
-        <div class="summary-header">
-          <div>
-            <h3 style="color: #0b5cab; font-size: 1.3rem; margin-bottom: 4px;">
-              Delivery Order #<span id="trackNomorDO">2023001234</span>
-            </h3>
-            <span style="font-size: 0.95rem; color: #718096;">Nama Mahasiswa: <strong id="trackNamaMahasiswa" style="color: #2d3748;">Rina Wulandari</strong></span>
+      <!-- STATUS SUMMARY CARD -->
+      <section class="tracking-result-card" style="margin-bottom: 1.5rem;">
+        <div class="result-header">
+          <div class="header-do-info">
+            <span class="badge badge-do">{{ currentDO.nomorDO }}</span>
+            <span style="font-size: 0.9rem; color: #64748b; margin-left: 8px;">
+              Ekspedisi: <strong>{{ currentDO.ekspedisi }}</strong>
+            </span>
           </div>
+
+          <!-- STATUS BADGE (Conditional Directives v-if, v-else-if, v-else) -->
           <div>
-            <span id="trackStatus" class="status-badge in-transit">Dalam Perjalanan</span>
+            <span 
+              v-if="currentDO.status === 'Terkirim'" 
+              class="badge-status badge-aman" 
+              style="font-size: 0.95rem; padding: 6px 14px;"
+            >
+              <span>&#10004;</span> Terkirim ke Mahasiswa
+            </span>
+            <span 
+              v-else-if="currentDO.status === 'Dalam Perjalanan'" 
+              class="badge-status badge-menipis" 
+              style="font-size: 0.95rem; padding: 6px 14px;"
+            >
+              <span>&#128666;</span> Dalam Perjalanan
+            </span>
+            <span 
+              v-else 
+              class="badge-status badge-kosong" 
+              style="font-size: 0.95rem; padding: 6px 14px;"
+            >
+              <span>&#9203;</span> {{ currentDO.status }}
+            </span>
           </div>
         </div>
 
-        <!-- PROGRESS BAR VISUAL / STEPPER -->
-        <div class="progress-stepper">
+        <!-- PROGRESS STEPPER STATUS -->
+        <div class="progress-stepper" style="margin: 1.5rem 0 1rem;">
           <div class="progress-track"></div>
-          <div class="progress-fill" style="width: 66%;"></div>
-          
-          <div class="step-node completed">
-            <div class="step-circle">&#10003;</div>
-            <span>Penerimaan Loket</span>
+          <div 
+            class="progress-fill" 
+            :style="{ width: currentDO.status === 'Terkirim' ? '100%' : '60%' }"
+          ></div>
+
+          <!-- Step 1: Pesanan Diproses -->
+          <div class="step-item completed">
+            <div class="step-circle">&#10004;</div>
+            <div class="step-label">
+              <strong>Order Terkonfirmasi</strong>
+              <small>Loket SITTA UT</small>
+            </div>
           </div>
-          <div class="step-node completed">
-            <div class="step-circle">&#10003;</div>
-            <span>Tiba di Hub Pusat</span>
+
+          <!-- Step 2: Dalam Pengiriman -->
+          <div :class="['step-item', currentDO.status === 'Terkirim' ? 'completed' : 'active']">
+            <div class="step-circle">
+              <span v-if="currentDO.status === 'Terkirim'">&#10004;</span>
+              <span v-else>2</span>
+            </div>
+            <div class="step-label">
+              <strong>Dalam Perjalanan</strong>
+              <small>{{ currentDO.ekspedisi }}</small>
+            </div>
           </div>
-          <div class="step-node active">
-            <div class="step-circle">&bull;</div>
-            <span>Dalam Perjalanan</span>
-          </div>
-          <div class="step-node">
-            <div class="step-circle">4</div>
-            <span>Terkirim</span>
+
+          <!-- Step 3: Diterima -->
+          <div :class="['step-item', currentDO.status === 'Terkirim' ? 'completed' : '']">
+            <div class="step-circle">
+              <span v-if="currentDO.status === 'Terkirim'">&#10004;</span>
+              <span v-else>3</span>
+            </div>
+            <div class="step-label">
+              <strong>Paket Diterima</strong>
+              <small>Penerima Mahasiswa</small>
+            </div>
           </div>
         </div>
 
-        <!-- DETAIL EKSPEDISI, TANGGAL KIRIM, JENIS PAKET, TOTAL PEMBAYARAN -->
-        <div class="details-grid">
+        <!-- GRID DETAIL INFORMASI MAHASISWA & PAKET -->
+        <div class="detail-grid" style="border-top: 1px solid #e2e8f0; padding-top: 1.25rem;">
           <div class="detail-item">
-            <div class="detail-item-title">Ekspedisi</div>
-            <div class="detail-item-val" id="trackEkspedisi">JNE</div>
+            <span class="detail-label">NIM Mahasiswa:</span>
+            <span class="detail-value" style="font-family: monospace; font-size: 1.05rem;">
+              {{ currentDO.nim }}
+            </span>
           </div>
+
           <div class="detail-item">
-            <div class="detail-item-title">Tanggal Kirim</div>
-            <div class="detail-item-val" id="trackTanggalKirim">2025-08-25</div>
+            <span class="detail-label">Nama Mahasiswa:</span>
+            <span class="detail-value" style="color: #0b5cab; font-weight: 700;">
+              {{ currentDO.nama }}
+            </span>
           </div>
+
           <div class="detail-item">
-            <div class="detail-item-title">Jenis Paket / Kode</div>
-            <div class="detail-item-val" id="trackJenisPaket">0JKT01</div>
+            <span class="detail-label">Paket Bahan Ajar (BMP):</span>
+            <span class="detail-value">
+              <span class="badge" style="background: #e0f2fe; color: #0369a1; font-weight: 700;">
+                {{ currentDO.paket }}
+              </span>
+            </span>
           </div>
+
           <div class="detail-item">
-            <div class="detail-item-title">Total Pembayaran</div>
-            <div class="detail-item-val" id="trackTotalPembayaran" style="color: #0b5cab; font-size: 1.1rem;">Rp 180.000</div>
+            <span class="detail-label">Tanggal Pengiriman:</span>
+            <span class="detail-value">
+              📅 {{ currentDO.tanggalKirim }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Total Harga Paket:</span>
+            <span class="detail-value" style="color: #166534; font-size: 1.15rem; font-weight: 700;">
+              {{ formatRupiah(currentDO.total) }}
+            </span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Layanan Ekspedisi:</span>
+            <span class="detail-value">
+              🚚 {{ currentDO.ekspedisi }}
+            </span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- TIMELINE DETAIL PERJALANAN PENGIRIMAN -->
-      <div class="timeline-card">
-        <h4 style="margin-bottom: 1.25rem; color: #1e3c72; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+      <!-- TIMELINE RIWAYAT PERJALANAN EKSPEDISI (v-for) -->
+      <section class="card" style="padding: 1.5rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e3c72; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          Histori Perjalanan Paket Ekspedisi
-        </h4>
-        <ul class="timeline" id="trackTimelineList">
-          <li class="timeline-step">
-            <div class="timeline-time">2025-08-25 10:12:20</div>
-            <div class="timeline-desc">Penerimaan di Loket: TANGERANG SELATAN. Pengirim: Universitas Terbuka</div>
-          </li>
-          <li class="timeline-step">
-            <div class="timeline-time">2025-08-25 14:07:56</div>
-            <div class="timeline-desc">Tiba di Hub: TANGERANG SELATAN</div>
-          </li>
-          <li class="timeline-step">
-            <div class="timeline-time">2025-08-25 10:12:20</div>
-            <div class="timeline-desc">Diteruskan ke Kantor Jakarta Selatan</div>
-          </li>
-        </ul>
-      </div>
+          Riwayat Perjalanan Ekspedisi (Tracking Log)
+        </h3>
 
-    </section>
+        <div class="timeline">
+          <div 
+            v-for="(log, idx) in currentDO.perjalanan" 
+            :key="idx" 
+            class="timeline-item"
+          >
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-time">⏱️ {{ log.waktu }}</div>
+              <div class="timeline-desc" style="font-weight: 600; color: #1f2937;">
+                {{ log.keterangan }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- KONDISI JIKA NOMOR DO TIDAK DITEMUKAN (v-else-if="!currentDO && hasSearched") -->
+    <div v-else-if="!currentDO && hasSearched" class="card" style="text-align: center; padding: 3rem 1.5rem;">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">📦❓</div>
+      <h3 style="color: #991b1b; font-size: 1.3rem; margin-bottom: 8px;">Nomor Delivery Order Tidak Ditemukan</h3>
+      <p style="color: #64748b; max-width: 500px; margin: 0 auto 1.5rem;">
+        Nomor DO <strong>"{{ inputCariDO }}"</strong> belum terdaftar dalam sistem SITTA UT. Silakan cek kembali nomor DO Anda atau daftarkan Delivery Order baru.
+      </p>
+      <button @click="bukaModalTambahDO" class="btn btn-primary">
+        + Buat Delivery Order Baru Sekarang
+      </button>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL POPUP: FORMULIR TAMBAH DELIVERY ORDER BARU (v-if) -->
+    <!-- Sesuai Soal Bagian 2: Tracking Delivery Order (DO) -->
+    <!-- ===================================================================== -->
+    <div v-if="showModalTambahDO" class="modal-backdrop-vue">
+      <div class="modal-dialog-vue" style="max-width: 680px;">
+        <div class="modal-header-vue">
+          <h4>Input Delivery Order (DO) Baru</h4>
+          <button type="button" @click="showModalTambahDO = false" class="btn-icon">&times;</button>
+        </div>
+
+        <form @submit.prevent="simpanDOBaru" novalidate>
+          <div class="modal-body-vue">
+            
+            <!-- 1. NOMOR DO (TERGENERATE OTOMATIS: DO[Tahun]-[Sequence]) -->
+            <div class="form-group" style="background: #f0f7ff; padding: 0.85rem; border-radius: 8px; border: 1px solid #bfdbfe; margin-bottom: 1.25rem;">
+              <label class="form-label" style="color: #1e40af; font-weight: 700;">
+                <span class="indikator-badge">Auto Generated</span>
+                Nomor DO (Otomatis):
+              </label>
+              <input 
+                type="text" 
+                :value="formDO.nomorDO" 
+                class="form-control" 
+                readonly 
+                style="font-family: monospace; font-size: 1.1rem; font-weight: 700; color: #0b5cab; background: #ffffff;"
+              >
+              <div class="form-hint" style="color: #1e40af;">
+                Format: <code>DO[TahunBerjalan]-[Sequence]</code> &bull; Tergenerate otomatis berdasarkan sequence data tracking sebelumnya.
+              </div>
+            </div>
+
+            <div class="filter-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1rem;">
+              <!-- 2. NIM Mahasiswa (Diisi Manual) -->
+              <div class="form-group">
+                <label class="form-label">NIM Mahasiswa <span style="color:#ef4444;">*</span></label>
+                <input 
+                  type="text" 
+                  v-model="formDO.nim" 
+                  :class="['form-control', { 'is-invalid': errorsDO.nim }]" 
+                  placeholder="Contoh: 043912345"
+                  required
+                >
+                <div v-if="errorsDO.nim" class="error-text">{{ errorsDO.nim }}</div>
+              </div>
+
+              <!-- 3. Nama Mahasiswa (Diisi Manual) -->
+              <div class="form-group">
+                <label class="form-label">Nama Lengkap Mahasiswa <span style="color:#ef4444;">*</span></label>
+                <input 
+                  type="text" 
+                  v-model="formDO.nama" 
+                  :class="['form-control', { 'is-invalid': errorsDO.nama }]" 
+                  placeholder="Contoh: Ahmad Fauzan"
+                  required
+                >
+                <div v-if="errorsDO.nama" class="error-text">{{ errorsDO.nama }}</div>
+              </div>
+            </div>
+
+            <div class="filter-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1rem;">
+              <!-- 4. Ekspedisi (Dipilih berdasarkan pengirimanList) -->
+              <div class="form-group">
+                <label class="form-label">Layanan Ekspedisi <span style="color:#ef4444;">*</span></label>
+                <select 
+                  v-model="formDO.ekspedisi" 
+                  :class="['form-control', { 'is-invalid': errorsDO.ekspedisi }]"
+                  required
+                >
+                  <option value="" disabled>-- Pilih Ekspedisi --</option>
+                  <option v-for="exp in pengirimanList" :key="exp.kode" :value="'JNE ' + exp.nama">
+                    JNE {{ exp.nama }}
+                  </option>
+                </select>
+                <div v-if="errorsDO.ekspedisi" class="error-text">{{ errorsDO.ekspedisi }}</div>
+              </div>
+
+              <!-- 5. Tanggal Kirim (Diisi Manual atau Fungsi Date) -->
+              <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <label class="form-label" style="margin-bottom: 0;">Tanggal Kirim <span style="color:#ef4444;">*</span></label>
+                  <button 
+                    type="button" 
+                    @click="isiTanggalHariIni" 
+                    class="login-link" 
+                    style="font-size: 0.75rem; text-decoration: underline;"
+                  >
+                    Hari Ini (Date)
+                  </button>
+                </div>
+                <input 
+                  type="date" 
+                  v-model="formDO.tanggalKirim" 
+                  :class="['form-control', { 'is-invalid': errorsDO.tanggalKirim }]" 
+                  required
+                >
+                <div v-if="errorsDO.tanggalKirim" class="error-text">{{ errorsDO.tanggalKirim }}</div>
+              </div>
+            </div>
+
+            <!-- 6. PAKET BAHAN AJAR (<select> DENGAN INFORMASI DETAIL DI BAWAHNYA) -->
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label">
+                Pilih Paket Bahan Ajar BMP <span style="color:#ef4444;">*</span>
+              </label>
+              <!-- Gunakan elemen <select> dan menampilkan kode paket dan nama paket -->
+              <select 
+                v-model="formDO.paketKode" 
+                :class="['form-control', { 'is-invalid': errorsDO.paketKode }]"
+                required
+              >
+                <option value="" disabled>-- Pilih Paket Bahan Ajar --</option>
+                <option v-for="pkt in paket" :key="pkt.kode" :value="pkt.kode">
+                  {{ pkt.kode }} - {{ pkt.nama }} ({{ formatRupiah(pkt.harga) }})
+                </option>
+              </select>
+              <div v-if="errorsDO.paketKode" class="error-text">{{ errorsDO.paketKode }}</div>
+
+              <!-- DETAIL ISI PAKET BAHAN AJAR MUNCUL DI BAWAH <select> (v-if) -->
+              <!-- Sesuai Kriteria Soal: "Setelah memilih paket, akan muncul detail isi paket 
+                   bahan ajar tersebut di bawah elemen <select> untuk memberikan informasi" -->
+              <div v-if="selectedPaketDetail" class="package-detail-card">
+                <h5>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                  Informasi Detail Isi {{ selectedPaketDetail.nama }} ({{ selectedPaketDetail.kode }}):
+                </h5>
+                <ul class="package-items-list">
+                  <li v-for="buku in selectedPaketDetail.items" :key="buku.kode">
+                    <span class="package-item-chip">
+                      <strong>{{ buku.kode }}</strong> &bull; {{ buku.judul }}
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 7. TOTAL HARGA (OTOMATIS DIAMBIL DARI ARRAY OF OBJECTS paket -> harga) -->
+            <div class="form-group" style="background: #f8fafc; padding: 0.85rem; border-radius: 8px; border: 1px dashed #cbd5e1;">
+              <label class="form-label" style="color: #334155; font-weight: 700;">
+                <span class="indikator-badge">Otomatis / Reactive</span>
+                Total Harga Paket:
+              </label>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #15803d;">
+                {{ formatRupiah(formDO.totalHarga) }}
+              </div>
+              <div class="form-hint">
+                Harga diambil secara otomatis dari properti <code>paket.harga</code> saat paket bahan ajar dipilih.
+              </div>
+            </div>
+
+          </div>
+
+          <div class="modal-footer-vue">
+            <button type="button" @click="showModalTambahDO = false" class="btn btn-outline">Batal</button>
+            <button type="submit" class="btn btn-primary">Terbitkan Delivery Order (DO)</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
   </main>
 
   <!-- FOOTER -->
-  <footer class="site-footer">
-    <p>&copy; 2026 SITTA - Universitas Terbuka. Tugas Praktik 1 Pengembangan Web Front-End (STSI4209).</p>
+  <footer class="site-footer" style="margin-top: auto; padding: 1.5rem 0; text-align: center; color: #64748b; font-size: 0.85rem; border-top: 1px solid #e2e8f0; background: #ffffff;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+      <p>SITTA UT &bull; Sistem Informasi Tiras &amp; Transaksi Bahan Ajar Universitas Terbuka</p>
+      <p style="margin-top: 4px; font-size: 0.8rem; color: #94a3b8;">
+        Implementasi Framework Vue.js - Tugas Praktik 2 STSI4209
+      </p>
+    </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/script.js"></script>
+  <!-- SCRIPT LIBRARIES: LOCAL VUE.JS DENGAN CDN FALLBACK -->
+  <script src="js/vue.js"></script>
+  <script>
+    if (!window.Vue) {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"><\/script>');
+    }
+  </script>
+  <!-- DUMMY DATA TEMPLATE & LOGIKA VUE -->
+  <script src="js/dataBahanAjar.js"></script>
+  <script src="js/tracking-app.js"></script>
 </body>
 </html>
